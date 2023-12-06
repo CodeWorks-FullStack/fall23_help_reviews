@@ -10,6 +10,13 @@ class RestaurantsService {
     const newRestaurants = res.data.map(pojo => new Restaurant(pojo))
     AppState.restaurants = newRestaurants
   }
+
+  async getRestaurantById(restaurantId) {
+    const res = await api.get(`api/restaurants/${restaurantId}`)
+    logger.log('GOT RESTY', res.data)
+    const newRestaurant = new Restaurant(res.data)
+    AppState.activeRestaurant = newRestaurant
+  }
 }
 
 export const restaurantsService = new RestaurantsService()
