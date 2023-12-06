@@ -1,5 +1,3 @@
-using Microsoft.AspNetCore.Http.HttpResults;
-
 namespace help_reviews.Controllers;
 
 [ApiController]
@@ -16,11 +14,11 @@ public class RestaurantsController : ControllerBase
   }
 
   [HttpGet]
-  public ActionResult<List<Restaurant>> GetRestaurants()
+  public ActionResult<List<Restaurant>> GetRestaurants(string name)
   {
     try
     {
-      List<Restaurant> restaurants = _restaurantsService.GetRestaurants();
+      List<Restaurant> restaurants = _restaurantsService.GetRestaurants(name);
       return Ok(restaurants);
     }
     catch (Exception exception)
@@ -28,6 +26,8 @@ public class RestaurantsController : ControllerBase
       return BadRequest(exception.Message);
     }
   }
+
+
 
   [HttpGet("{restaurantId}")]
   public ActionResult<Restaurant> GetRestaurantById(int restaurantId)

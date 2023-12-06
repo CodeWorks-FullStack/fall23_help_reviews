@@ -44,12 +44,18 @@ public class RestaurantsService
     return restaurant;
   }
 
-  // TODO query
-  internal List<Restaurant> GetRestaurants()
+  internal List<Restaurant> GetRestaurants(string name)
   {
-    List<Restaurant> restaurants = _repository.GetRestaurants();
-    return restaurants;
+    if (name == null)
+    {
+      List<Restaurant> restaurants = _repository.GetRestaurants();
+      return restaurants;
+    }
+
+    List<Restaurant> restaurantsWithQuery = _repository.GetRestaurantsWithQuery(name);
+    return restaurantsWithQuery;
   }
+
 
   internal Restaurant UpdateRestaurant(int restaurantId, string userId, Restaurant restaurantData)
   {

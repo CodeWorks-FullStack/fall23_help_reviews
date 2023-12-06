@@ -3,6 +3,7 @@
 
 
 
+
 namespace help_reviews.Repositories;
 
 public class RestaurantsRepository
@@ -69,6 +70,23 @@ public class RestaurantsRepository
     //   return resty;
     // }).ToList();
     List<Restaurant> restaurants = _db.Query<Restaurant, Profile, Restaurant>(sql, RestaurantBuilder).ToList();
+    return restaurants;
+  }
+
+  internal List<Restaurant> GetRestaurantsWithQuery(string name)
+  {
+    name = $"%{name}%";
+
+    string sql = @"
+    SELECT
+    resty.*,
+    acc.*
+    FROM restaurants resty
+    JOIN accounts acc ON resty.creatorId = acc.id
+    WHERE resty.name LIKE @name;";
+
+    List<Restaurant> restaurants = _db.Query<Restaurant, Profile, Restaurant>(sql, RestaurantBuilder, new { name }).ToList();
+
     return restaurants;
   }
 
