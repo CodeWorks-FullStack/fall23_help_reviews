@@ -44,15 +44,17 @@ public class RestaurantsService
     return restaurant;
   }
 
-  internal List<Restaurant> GetRestaurants(string name)
+  internal List<Restaurant> GetRestaurants(string name, string userId)
   {
     if (name == null)
     {
       List<Restaurant> restaurants = _repository.GetRestaurants();
+      restaurants = restaurants.FindAll(restaurant => restaurant.IsShutDown == false || restaurant.CreatorId == userId);
       return restaurants;
     }
 
     List<Restaurant> restaurantsWithQuery = _repository.GetRestaurantsWithQuery(name);
+    restaurantsWithQuery = restaurantsWithQuery.FindAll(restaurant => restaurant.IsShutDown == false || restaurant.CreatorId == userId);
     return restaurantsWithQuery;
   }
 

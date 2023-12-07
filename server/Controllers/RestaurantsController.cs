@@ -14,11 +14,12 @@ public class RestaurantsController : ControllerBase
   }
 
   [HttpGet]
-  public ActionResult<List<Restaurant>> GetRestaurants(string name)
+  public async Task<ActionResult<List<Restaurant>>> GetRestaurants(string name)
   {
     try
     {
-      List<Restaurant> restaurants = _restaurantsService.GetRestaurants(name);
+      Account userInfo = await _auth0Provider.GetUserInfoAsync<Account>(HttpContext);
+      List<Restaurant> restaurants = _restaurantsService.GetRestaurants(name, userInfo?.Id);
       return Ok(restaurants);
     }
     catch (Exception exception)

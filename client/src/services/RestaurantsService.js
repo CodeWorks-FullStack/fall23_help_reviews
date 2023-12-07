@@ -17,6 +17,19 @@ class RestaurantsService {
     const newRestaurant = new Restaurant(res.data)
     AppState.activeRestaurant = newRestaurant
   }
+
+  async updateRestaurant(restaurantId, restaurantData) {
+    const res = await api.put(`api/restaurants/${restaurantId}`, restaurantData)
+    logger.log('UPDATED RESTY', res.data)
+    const newRestaurant = new Restaurant(res.data)
+    AppState.activeRestaurant = newRestaurant
+  }
+
+  async destroyRestaurant(restaurantId) {
+    const res = await api.delete(`api/restaurants/${restaurantId}`)
+    logger.log('DESTROYED RESTY', res.data)
+    AppState.activeRestaurant = null
+  }
 }
 
 export const restaurantsService = new RestaurantsService()
