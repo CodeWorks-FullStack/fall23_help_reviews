@@ -28,7 +28,7 @@
       <div class="col-12">
         <h2>Reports for <span class="text-success">{{ restaurant.name }}</span></h2>
       </div>
-      <div v-for="report in reports" :key="report.id" class="col-12">
+      <div v-for="report in reports" :key="report.id" class="col-12 mb-3">
         <ReportCard :reportProp="report" />
       </div>
     </section>
@@ -82,13 +82,16 @@ export default {
         Pop.error(error);
       }
     }
+
     // onMounted(() => {
     //   getRestaurantById()
     // })
     watch(watchableRestaurantId, () => {
+      restaurantsService.clearAppState()
       getRestaurantById();
       getReportsByRestaurantId();
     }, { immediate: true });
+
     return {
       restaurant: computed(() => AppState.activeRestaurant),
       account: computed(() => AppState.account),

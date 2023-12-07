@@ -7,11 +7,11 @@
       </router-link>
       <p class="card-text">{{ restaurantProp.description }}</p>
       <p class="d-flex justify-content-between">
-        <span class="fs-5">
+        <span class="fs-5" :title="`${restaurantProp.name} has ${restaurantProp.visits} visits`">
           <i class="mdi mdi-account-multiple fs-3 text-success"></i>
           {{ restaurantProp.visits }}
         </span>
-        <span class="fs-5">
+        <span class="fs-5" :title="`${restaurantProp.name} has ${restaurantProp.reportCount} reports`">
           <i class="mdi mdi-file-multiple fs-3 text-success"></i>
           {{ restaurantProp.reportCount }}
         </span>

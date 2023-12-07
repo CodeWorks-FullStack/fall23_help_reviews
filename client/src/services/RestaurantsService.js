@@ -30,6 +30,11 @@ class RestaurantsService {
     logger.log('DESTROYED RESTY', res.data)
     AppState.activeRestaurant = null
   }
+
+  clearAppState() {
+    AppState.activeRestaurant = null
+    AppState.reports.length = 0
+  }
 }
 
 export const restaurantsService = new RestaurantsService()
