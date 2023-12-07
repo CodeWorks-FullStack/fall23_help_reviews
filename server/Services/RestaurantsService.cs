@@ -20,7 +20,7 @@ public class RestaurantsService
 
   internal string DestroyRestaurant(int restaurantId, string userId)
   {
-    Restaurant restaurant = GetRestaurantById(restaurantId);
+    Restaurant restaurant = GetRestaurantById(restaurantId, userId);
 
     if (restaurant.CreatorId != userId)
     {
@@ -32,7 +32,7 @@ public class RestaurantsService
     return $"{restaurant.Name} has been deleted!";
   }
 
-  internal Restaurant GetRestaurantById(int restaurantId)
+  internal Restaurant GetRestaurantById(int restaurantId, string userId)
   {
     Restaurant restaurant = _repository.GetRestaurantById(restaurantId);
 
@@ -41,27 +41,44 @@ public class RestaurantsService
       throw new Exception($"Invalid Id: {restaurantId}");
     }
 
+    if (restaurant.IsShutDown == true && restaurant.CreatorId != userId)
+    {
+      throw new Exception("Something went wrong... 😉");
+    }
+
+    return restaurant;
+  }
+
+  internal Restaurant GetRestaurantByIdAndIncrementVisits(int restaurantId, string userId)
+  {
+    Restaurant restaurant = GetRestaurantById(restaurantId, userId);
+    restaurant.Visits++;
+    _repository.UpdateRestaurant(restaurant);
     return restaurant;
   }
 
   internal List<Restaurant> GetRestaurants(string name, string userId)
   {
-    if (name == null)
-    {
-      List<Restaurant> restaurants = _repository.GetRestaurants();
-      restaurants = restaurants.FindAll(restaurant => restaurant.IsShutDown == false || restaurant.CreatorId == userId);
-      return restaurants;
-    }
+    // if (name == null)
+    // {
+    //   List<Restaurant> restaurants = _repository.GetRestaurants();
+    //   restaurants = restaurants.FindAll(restaurant => restaurant.IsShutDown == false || restaurant.CreatorId == userId);
+    //   return restaurants;
+    // }
+    // List<Restaurant> restaurantsWithQuery = _repository.GetRestaurantsWithQuery(name);
+    // restaurantsWithQuery = restaurantsWithQuery.FindAll(restaurant => restaurant.IsShutDown == false || restaurant.CreatorId == userId);
+    // return restaurantsWithQuery;
 
-    List<Restaurant> restaurantsWithQuery = _repository.GetRestaurantsWithQuery(name);
-    restaurantsWithQuery = restaurantsWithQuery.FindAll(restaurant => restaurant.IsShutDown == false || restaurant.CreatorId == userId);
-    return restaurantsWithQuery;
+    List<Restaurant> restaurants = name == null ? _repository.GetRestaurants() : _repository.GetRestaurantsWithQuery(name);
+    restaurants = restaurants.FindAll(restaurant => restaurant.IsShutDown == false || restaurant.CreatorId == userId);
+    return restaurants;
+
   }
 
 
   internal Restaurant UpdateRestaurant(int restaurantId, string userId, Restaurant restaurantData)
   {
-    Restaurant restaurantToUpdate = GetRestaurantById(restaurantId);
+    Restaurant restaurantToUpdate = GetRestaurantById(restaurantId, userId);
 
     if (restaurantToUpdate.CreatorId != userId)
     {

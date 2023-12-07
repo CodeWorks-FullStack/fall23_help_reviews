@@ -31,11 +31,12 @@ public class RestaurantsController : ControllerBase
 
 
   [HttpGet("{restaurantId}")]
-  public ActionResult<Restaurant> GetRestaurantById(int restaurantId)
+  public async Task<ActionResult<Restaurant>> GetRestaurantById(int restaurantId)
   {
     try
     {
-      Restaurant restaurant = _restaurantsService.GetRestaurantById(restaurantId);
+      Account userInfo = await _auth0Provider.GetUserInfoAsync<Account>(HttpContext);
+      Restaurant restaurant = _restaurantsService.GetRestaurantByIdAndIncrementVisits(restaurantId, userInfo?.Id);
       return Ok(restaurant);
     }
     catch (Exception exception)
