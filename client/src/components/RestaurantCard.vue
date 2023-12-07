@@ -13,7 +13,7 @@
         </span>
         <span class="fs-5">
           <i class="mdi mdi-file-multiple fs-3 text-success"></i>
-          0
+          {{ restaurantProp.reportCount }}
         </span>
       </p>
     </div>

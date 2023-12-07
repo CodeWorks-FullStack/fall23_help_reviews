@@ -44,3 +44,12 @@ CREATE TABLE IF NOT EXISTS reports(
   FOREIGN KEY (restaurantId) REFERENCES restaurants(id) ON DELETE CASCADE,
   FOREIGN KEY (creatorId) REFERENCES accounts(id) ON DELETE CASCADE
 )default charset utf8 COMMENT '';
+
+SELECT
+rest.*,
+COUNT(rep.id) AS reportCount,
+acc.*
+FROM restaurants rest
+JOIN accounts acc ON acc.id = rest.creatorId
+LEFT JOIN reports rep ON rep.restaurantId = rest.id
+GROUP BY (rest.id); 

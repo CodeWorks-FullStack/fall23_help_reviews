@@ -59,10 +59,13 @@ public class RestaurantsRepository
   {
     string sql = @"
     SELECT
-    resty.*,
+    rest.*,
+    COUNT(rep.id) AS reportCount,
     acc.*
-    FROM restaurants resty
-    JOIN accounts acc ON resty.creatorId = acc.id;";
+    FROM restaurants rest
+    JOIN accounts acc ON acc.id = rest.creatorId
+    LEFT JOIN reports rep ON rep.restaurantId = rest.id
+    GROUP BY (rest.id);";
 
     // List<Restaurant> restaurants = _db.Query<Restaurant, Profile, Restaurant>(sql, (resty, profile) =>
     // {
@@ -79,11 +82,14 @@ public class RestaurantsRepository
 
     string sql = @"
     SELECT
-    resty.*,
+    rest.*,
+    COUNT(rep.id) AS reportCount,
     acc.*
-    FROM restaurants resty
-    JOIN accounts acc ON resty.creatorId = acc.id
-    WHERE resty.name LIKE @name;";
+    FROM restaurants rest
+    JOIN accounts acc ON acc.id = rest.creatorId
+    LEFT JOIN reports rep ON rep.restaurantId = rest.id
+    GROUP BY (rest.id)
+    WHERE rest.name LIKE @name;";
 
     List<Restaurant> restaurants = _db.Query<Restaurant, Profile, Restaurant>(sql, RestaurantBuilder, new { name }).ToList();
 

@@ -10,6 +10,7 @@ export class Restaurant extends RepoItem {
     this.visits = data.visits
     this.isShutDown = data.isShutDown
     this.creatorId = data.creatorId
+    this.reportCount = data.reportCount
     this.creator = data.creator
   }
 }

@@ -11,8 +11,9 @@
         <img :src="restaurant.imgUrl" class="img-fluid mb-3" alt="Picture of the restaurant">
         <p class="mb-5">{{ restaurant.description }}</p>
       </div>
-      <div class="col-md-6">
+      <div class="col-md-6 d-flex">
         <p>{{ restaurant.visits }} recent visits</p>
+        <p class="ms-3">{{ reports.length }} report count</p>
       </div>
       <div v-if="restaurant.creatorId == account.id" class="col-md-6 text-end">
         <button @click="updateRestaurant()" class="btn btn-success" type="button">
@@ -57,20 +58,25 @@ export default {
     const route = useRoute();
     const router = useRouter();
     const watchableRestaurantId = computed(() => route.params.restaurantId);
+
     async function getRestaurantById() {
       try {
-        // TODO what happens when I am malicious
         const restaurantId = route.params.restaurantId;
         await restaurantsService.getRestaurantById(restaurantId);
       }
       catch (error) {
         Pop.error(error);
+        logger.log(error)
+        // NOTE push user away if malicious
+        if (error.response.data.includes('😉')) {
+          router.push({ name: 'Home' })
+        }
       }
     }
     async function getReportsByRestaurantId() {
       try {
         const restaurantId = route.params.restaurantId;
-        await reportsService.getReportsByRestaurantId(restaurantId);
+        await reportsService.getReportsByRestaurantId(restaurantId)
       }
       catch (error) {
         Pop.error(error);

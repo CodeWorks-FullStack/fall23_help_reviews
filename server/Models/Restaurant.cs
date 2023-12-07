@@ -8,5 +8,6 @@ public class Restaurant : RepoItem<int>
   public int Visits { get; set; }
   public bool? IsShutDown { get; set; }
   public string CreatorId { get; set; }
+  public int ReportCount { get; set; }
   public Profile Creator { get; set; }
 }
