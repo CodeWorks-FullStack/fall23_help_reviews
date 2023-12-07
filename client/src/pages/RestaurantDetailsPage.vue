@@ -47,6 +47,7 @@ export default {
     const watchableRestaurantId = computed(() => route.params.restaurantId)
     async function getRestaurantById() {
       try {
+        // TODO what happens when I am malicious
         const restaurantId = route.params.restaurantId
         await restaurantsService.getRestaurantById(restaurantId)
       } catch (error) {
